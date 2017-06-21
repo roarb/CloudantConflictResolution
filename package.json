@@ -1,0 +1,14 @@
+{
+  "name": "Cloudant Conflict Resolution",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roarb/cloudantConflictResolution.git"
+  },
+  "author": "Rob Hoehn",
+  "license": "MIT",
+  "dependencies": {
+    "cloudant": "^1.8.0"
+  }
+}
