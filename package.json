@@ -2,7 +2,7 @@
   "name": "PacklyticsCloudantCleaning",
   "description": "Creates a Cron script that launches a cleaning script to the Cloudant monnit-hbs database. Reports via email on success.",
   "scripts": {
-    "start": "node start"
+    "start": "node cron.js"
   },
   "version": "1.0.0",
   "main": "start.js",
