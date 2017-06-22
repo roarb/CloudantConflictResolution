@@ -1,7 +1,28 @@
 var Cloudant = require('cloudant');
+var nodemailer = require('nodemailer');
 var config = require("./config.json");
 var cloudant = Cloudant(config.cAuth);
 var sensordb = cloudant.db.use("monnit-hbs");
+
+// create reusable transporter object using the default SMTP transport
+var transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // secure:true for port 465, secure:false for port 587
+    auth: {
+        user: 'Packlytics@gmail.com',
+        pass: '14?hxzekaW7D1X'
+    }
+});
+// setup email data with unicode symbols
+var mailOptions = {
+    from: '"Packlytics -- Cloudant Cleaning Run" <packlytics@gmail.com>', // sender address
+    to: 'rhoehn24@gmail.com', // list of receivers
+    subject: 'Cloudant Cleanup Run', // Subject line
+    text: 'tmp', // plain text body
+    html: '<b>tmp</b>' // html body
+};
+
 
 // TODO: we'll need a location to host this and run on a cron - node-red can't reproduce this code correctly.
 var conflictReport = [];
@@ -22,10 +43,24 @@ sensordb.list(function(err, data){
             });
         }
         setTimeout(function(){
-            console.log('wait a couple minuets - then report - huzzah');
-            console.log(conflictReport);
             if (conflictReport.length > 0){
                 // email out a notice
+                // send mail with defined transport object
+                var html = "<ul>";
+                for (var i = 0; i < conflictReport.length; i++){
+                    html += "<li>"+conflictReport[i]+"</li>";
+                }
+                html += "</ul>";
+                mailOptions.html = html;
+                transporter.sendMail(mailOptions, function(err, info){
+                    if (err){
+                        console.log(err);
+                        return false;
+                    } else {
+                        console.log('Message %s sent: %s', info.messageId, info.response);
+                        return true;
+                    }
+                });
             }
         }, 120000);
     }
