@@ -3,3 +3,4 @@
 /config.json
 /.cfignore
 /bluemixCLI.txt
+/env.sh
