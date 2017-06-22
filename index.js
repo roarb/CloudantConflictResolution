@@ -3,6 +3,7 @@ var nodemailer = require('nodemailer');
 var config = require("./config.json");
 var cloudant = Cloudant(config.cAuth);
 var sensordb = cloudant.db.use("monnit-hbs");
+var fs = require('fs');
 
 // create reusable transporter object using the default SMTP transport
 var transporter = nodemailer.createTransport({
@@ -42,6 +43,8 @@ sensordb.list(function(err, data){
             });
         }
         setTimeout(function(){
+            var reportWrite = {"runtime": new Date(), "conflictReport": conflictReport};
+            fs.writeFileSync('./logs/conflict.json', JSON.stringify(reportWrite), 'utf-8');
             if (conflictReport.length > 0){
                 // email out a notice
                 // send mail with defined transport object
@@ -61,7 +64,7 @@ sensordb.list(function(err, data){
                     }
                 });
             }
-        }, 120000);
+        }, 120000); // 2min
     }
 });
 
