@@ -1,0 +1,4 @@
+Push updates: bluemix app push PacklyticsCloudantCleaning
+Login: bluemix login -u rhoehn@rocketindustrial.com -o Packlytics -s prod
+    org: Packlytics
+    space: prod

@@ -1,7 +1,11 @@
 {
-  "name": "Cloudant Conflict Resolution",
+  "name": "PacklyticsCloudantCleaning",
+  "description": "Creates a Cron script that launches a cleaning script to the Cloudant monnit-hbs database. Reports via email on success.",
+  "scripts": {
+    "start": "node start"
+  },
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "start.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/roarb/cloudantConflictResolution.git"
@@ -10,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "cloudant": "^1.8.0",
-    "nodemailer": "^4.0.1"
+    "nodemailer": "^4.0.1",
+    "node-cron": ""
   }
 }

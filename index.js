@@ -23,7 +23,6 @@ var mailOptions = {
     html: '<b>tmp</b>' // html body
 };
 
-
 // TODO: we'll need a location to host this and run on a cron - node-red can't reproduce this code correctly.
 var conflictReport = [];
 var docIds = [];
