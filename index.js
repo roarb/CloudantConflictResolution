@@ -4,7 +4,7 @@ var cloudant = Cloudant(config.cAuth);
 var sensordb = cloudant.db.use("monnit-hbs");
 
 // TODO: we'll need a location to host this and run on a cron - node-red can't reproduce this code correctly.
-
+var conflictReport = [];
 var docIds = [];
 sensordb.list(function(err, data){
     if (err){
@@ -16,10 +16,18 @@ sensordb.list(function(err, data){
                 if(err){
                     console.log(err);
                 } else {
+                    conflictReport.push("Resolved "+data.length+" conflicts for document: "+data[0].id);
                     console.log("Resolved "+data.length+" conflicts for document: "+data[0].id);
                 }
             });
         }
+        setTimeout(function(){
+            console.log('wait a couple minuets - then report - huzzah');
+            console.log(conflictReport);
+            if (conflictReport.length > 0){
+                // email out a notice
+            }
+        }, 120000);
     }
 });
 
