@@ -1,0 +1,5 @@
+---
+applications:
+- name: PacklyticsCloudantCleaning
+  host: packlyticscloudantcleaning
+  memory: 128m
