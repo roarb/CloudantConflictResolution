@@ -2,6 +2,8 @@ var express = require("express");
 var app = express();
 var cfenv = require("cfenv");
 var bodyParser = require('body-parser');
+var fs = require('fs');
+var ejs = require('ejs');
 
 var cron = require("node-cron");
 var childProcess = require('child_process'),
@@ -16,64 +18,28 @@ cron.schedule('* */1 * * *', function() {
     });
 });
 
+app.set('views', __dirname + "/views");
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public'));
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
 
-/* Endpoint to greet and add a new visitor to database.
- * Send a POST request to localhost:3000/api/visitors with body
- * {
- * 	"name": "Bob"
- * }
- */
-
-/**
- * Endpoint to get a JSON array of all the visitors in the database
- * REST API example:
- * <code>
- * GET http://localhost:3000/api/visitors
- * </code>
- *
- * Response:
- * [ "Bob", "Jane" ]
- * @return An array of all the visitor names
- */
-
-// load local VCAP configuration  and service credentials
-// var vcapLocal;
-// try {
-//     vcapLocal = require('./vcap-local.json');
-//     console.log("Loaded local VCAP", vcapLocal);
-// } catch (e) { }
-
-// const appEnvOpts = vcapLocal ? { vcap: vcapLocal} : {}
-//
-// const appEnv = cfenv.getAppEnv(appEnvOpts);
-//
-// if (appEnv.services['cloudantNoSQLDB']) {
-//     // Load the Cloudant library.
-//     var Cloudant = require('cloudant');
-//
-//     // Initialize database with credentials
-//     var cloudant = Cloudant(appEnv.services['cloudantNoSQLDB'][0].credentials);
-//
-//     //database name
-//     var dbName = 'mydb';
-//
-//     // Create a new "mydb" database.
-//     cloudant.db.create(dbName, function(err, data) {
-//         if(!err) //err if database doesn't already exists
-//             console.log("Created database: " + dbName);
-//     });
-//
-//     // Specify the database we are going to use (mydb)...
-//     mydb = cloudant.db.use(dbName);
-// }
+app.get("/", function (request, response) {
+    fs.readFile('./logs/conflict.json', 'utf-8', function(err, data){
+        if (err){
+            console.log(err);
+            response.render('index.js', {"err": err, "monnithbs": "err"})
+        }
+        response.render('index.ejs', {"err": "", "monnithbs": data})
+    })
+});
 
 //serve static file (index.html, images, css)
-app.use(express.static(__dirname + '/views'));
+// app.use(express.static(__dirname + '/views'));
 
 
 
